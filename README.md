@@ -3,7 +3,7 @@ Ganyu is cool. Live, Laugh, Love, Ganyu.
 
 ## How to self-host Ganyu (＾◡＾)
 
-1. Run this command in the ganyu-bot directory to create a virtual environment for the bot to run in.
+1. Run this command in the ganyu-bot directory to create a virtual environment for the bot to run in.  
 `$ python -m venv venv`
 
 2. Activate the virtual environment with:
