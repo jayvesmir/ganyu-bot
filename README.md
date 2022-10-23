@@ -1,4 +1,4 @@
-# Ganyu bot
+# Ganyu bot - Extremely early in development!!! (So early in fact, that there aren't any other functions than ping.)
 Ganyu is cool. Live, Laugh, Love, Ganyu.
 
 ## How to self-host Ganyu (＾◡＾)
