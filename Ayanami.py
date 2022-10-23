@@ -23,7 +23,7 @@ class Ganyu(Client):
         await bot.change_presence(status=discord.Status.idle, activity=discord.Game('with your data'))
         await tree.sync(guild=discord.Object(id=TEST_SERVER))
         self.synced = True
-        log().info(f"Ganyu is online as {bot.user}.")
+        log().info(f'Ganyu is online as {bot.user}.')
 
 bot = Ganyu()
 tree = app_commands.CommandTree(bot)
@@ -40,7 +40,7 @@ async def on_message(ctx):
 
 @tree.command(name='ping', description='Check if the bot lives.', guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction):
-    await interaction.response.send_message(f"Pong! ({bot.latency*1000:.2f}ms)")
+    await interaction.response.send_message(f'Pong! ({bot.latency*1000:.2f}ms)')
     
 @tree.command(name='eightball', description='Rolls the 8ball.', guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction, query: str):
@@ -49,7 +49,7 @@ async def self(interaction: discord.Interaction, query: str):
     
 @tree.command(name='avatar', description="Returns a user's avatar", guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction, member: Member = None):
-    if member == None:
+    if member is None:
         member = interaction.user
         
     name = member.name + '#' + member.discriminator
