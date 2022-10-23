@@ -17,6 +17,7 @@ class Ganyu(discord.Client):
         self.synced = False
         
     async def on_ready(self):
+        await bot.change_presence(status=discord.Status.idle, activity=discord.Game('with your data'))
         await tree.sync(guild=discord.Object(id=980162247299059792))
         self.synced = True
         log.info(f"Ganyu is online as {bot.user}.")
@@ -52,8 +53,9 @@ async def self(interaction: discord.Interaction, member: discord.Member = None):
     
     await interaction.response.send_message(embed=embed)
     
-
-## Legacy
+bot.run(TOKEN)
+    
+## Legacy (Prefix Commands)
 
 # # Events
 # @bot.event
@@ -89,5 +91,3 @@ async def self(interaction: discord.Interaction, member: discord.Member = None):
 #     embed.set_image(url=pfp.url)
     
 #     await ctx.send(embed=embed)
-
-bot.run(TOKEN)
