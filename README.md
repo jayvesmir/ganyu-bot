@@ -2,7 +2,6 @@
 Ganyu is cool. Live, Laugh, Love, Ganyu.
 
 - Extremely early in development!!! (So early in fact, that there aren't any other functions than ping.)
-- The constant TEST_SERVER is currently being used as the bot is still in development and I need it to register slash commands quickly. (If you're going to self host Ganyu, you definitly want that too.) I might make a separate branch where this isn't a thing I still have to figure out how to work with github efficiently. (O_O;)
 
 ## How to self-host Ganyu (Windows only) (＾◡＾)
 
