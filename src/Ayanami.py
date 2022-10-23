@@ -1,6 +1,6 @@
 import json
-from ssl import ALERT_DESCRIPTION_ACCESS_DENIED
 TOKEN = json.loads(open('config.json', 'r').read())['token']
+TEST_SERVER = json.loads(open('config.json', 'r').read())['commands_guild']
 
 import discord
 from discord.ext import commands
@@ -18,7 +18,7 @@ class Ganyu(discord.Client):
         
     async def on_ready(self):
         await bot.change_presence(status=discord.Status.idle, activity=discord.Game('with your data'))
-        await tree.sync(guild=discord.Object(id=980162247299059792))
+        await tree.sync(guild=discord.Object(id=TEST_SERVER))
         self.synced = True
         log.info(f"Ganyu is online as {bot.user}.")
         
@@ -29,16 +29,16 @@ class Ganyu(discord.Client):
 bot = Ganyu()
 tree = app_commands.CommandTree(bot)
 
-@tree.command(name='ping', description='Check if the bot lives.', guild=discord.Object(id=980162247299059792))
+@tree.command(name='ping', description='Check if the bot lives.', guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction):
     await interaction.response.send_message(f"Pong! ({bot.latency*1000:.2f}ms)")
     
-@tree.command(name='eightball', description='Rolls the 8ball.', guild=discord.Object(id=980162247299059792))
+@tree.command(name='eightball', description='Rolls the 8ball.', guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction, query: str):
     responses = ["It is certain.","It is decidedly so.","Without a doubt.","Yes definitely.","You may rely on it.","As I see it, yes.","Most likely.","Outlook good.","Yes.","Signs point to yes.","Reply hazy, try again.","Ask again later.","Better not tell you now.","Cannot predict now.","Concentrate and ask again.","Don't count on it.","My reply is no.","My sources say no.","Outlook not so good.","Very doubtful."]
     await interaction.response.send_message(f'**Question:** {query}\n**Answer:** {random.choice(responses)}')
     
-@tree.command(name='avatar', description="Returns a user's avatar", guild=discord.Object(id=980162247299059792))
+@tree.command(name='avatar', description="Returns a user's avatar", guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction, member: discord.Member = None):
     if member == None:
         member = interaction.user
