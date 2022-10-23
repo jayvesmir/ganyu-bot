@@ -1,5 +1,6 @@
 # Directories
 venv/
+src/__pycache__/
 
 # Files
 config.json
