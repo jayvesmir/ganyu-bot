@@ -44,7 +44,7 @@ async def self(interaction: discord.Interaction):
     
 @tree.command(name='eightball', description='Rolls the 8ball.', guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction, query: str):
-    responses = ["It is certain.","It is decidedly so.","Without a doubt.","Yes definitely.","You may rely on it.","As I see it, yes.","Most likely.","Outlook good.","Yes.","Signs point to yes.","Reply hazy, try again.","Ask again later.","Better not tell you now.","Cannot predict now.","Concentrate and ask again.","Don't count on it.","My reply is no.","My sources say no.","Outlook not so good.","Very doubtful."]
+    responses = ['It is certain.',"It is decidedly so.","Without a doubt.","Yes definitely.","You may rely on it.","As I see it, yes.","Most likely.","Outlook good.","Yes.","Signs point to yes.","Reply hazy, try again.","Ask again later.","Better not tell you now.","Cannot predict now.","Concentrate and ask again.","Don't count on it.","My reply is no.","My sources say no.","Outlook not so good.","Very doubtful."]
     await interaction.response.send_message(f'**Question:** {query}\n**Answer:** {random.choice(responses)}')
     
 @tree.command(name='avatar', description="Returns a user's avatar", guild=discord.Object(id=TEST_SERVER))
