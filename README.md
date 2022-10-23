@@ -1,5 +1,5 @@
 # Ganyu bot
-Ganyu is cool. Live Laugh Ganyu.
+Ganyu is cool. Live, Laugh, Love, Ganyu.
 
 ## How to self-host Ganyu (＾◡＾)
 
