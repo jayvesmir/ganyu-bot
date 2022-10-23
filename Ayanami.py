@@ -13,7 +13,7 @@ import random
 
 class Ganyu(discord.Client):
     def __init__(self):
-        super().__init__(intents=discord.Intents.default())
+        super().__init__(intents=discord.Intents.all())
         self.synced = False
         
     async def on_ready(self):
@@ -21,13 +21,14 @@ class Ganyu(discord.Client):
         await tree.sync(guild=discord.Object(id=TEST_SERVER))
         self.synced = True
         log.info(f"Ganyu is online as {bot.user}.")
-        
-    async def on_member_join(member):
-        channel = member.guild.system_channel
-        await channel.send(f'{member.mention} Welcome To The Server!')
-        
+
 bot = Ganyu()
 tree = app_commands.CommandTree(bot)
+
+@bot.event
+async def on_member_join(member):
+    channel = member.guild.system_channel
+    await channel.send(f'{member.mention} Welcome To The Server!')
 
 @tree.command(name='ping', description='Check if the bot lives.', guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction):
