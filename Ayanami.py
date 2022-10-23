@@ -4,11 +4,12 @@ from commands import processCommands
 import json
 import discord
 
-cofigContent = open('config.json', 'r').read()
-TOKEN = json.loads(cofigContent)['token']
-TEST_SERVER = discord.Object(id=json.loads(cofigContent)['commands_guild'])
-IS_DEBUG: bool = True if str(json.loads(cofigContent).get('is_debug', 'false')).capitalize() == 'True' else False
-PREFIX: str = json.loads(cofigContent)['prefix']
+with open('config.json', 'r') as f:
+    jsonConfig = json.loads(f.read())
+TOKEN = jsonConfig['token']
+TEST_SERVER = discord.Object(id=jsonConfig['commands_guild'])
+IS_DEBUG: bool = True if str(jsonConfig.get('is_debug', 'false')).capitalize() == 'True' else False
+PREFIX: str = jsonConfig['prefix']
 
 from discord.ext import commands
 from discord import Member, Client, app_commands
