@@ -17,7 +17,7 @@ class Ganyu(discord.Client):
         self.synced = False
         
     async def on_ready(self):
-        await tree.synced(guild=discord.Object(id=980162247299059792))
+        await tree.sync(guild=discord.Object(id=980162247299059792))
         self.synced = True
         log.info(f"Ganyu is online as {bot.user}.")
         
