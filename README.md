@@ -26,6 +26,15 @@ Ganyu is cool. Live, Laugh, Love, Ganyu.
   "prefix": "<prefix>"
 }
 ```
+You can also specify if you want the bot to register it's slash commands globally or not using the 'is_debug' attribute, if set to true, Ganyu's slash commands will register to commands_guild exclusively, if set to anything else (including the attribute not existing), Ganyu's slash commands will register globally. Use like this:
+```json
+{
+  "token": "<account_token>",
+  "commands_guild": "<your_server_id>",
+  "is_debug": "false",
+  "prefix": "<prefix>"
+}
+```
 
 6. Start the bot. The initial output should closely match this:
 ```
