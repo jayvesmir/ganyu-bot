@@ -1,7 +1,7 @@
 from typing import Optional
 from logger import log
 from json import loads
-PREFIX: str = loads(open('config.json', 'r').read())['prefix']
+PREFIX: str = loads(open('config.json', 'r').read()).get('prefix', 'g.')
 
 def validate(msg: str) -> bool:
     if msg.startswith(PREFIX):
