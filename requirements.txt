@@ -1,0 +1,2 @@
+discord.py @ git+https://github.com/Rapptz/discord.py@01915fbc095a72ffd2231c72b7c0892a377a477c
+genshin==1.3.0
