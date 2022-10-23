@@ -18,11 +18,12 @@ Ganyu is cool. Live, Laugh, Love, Ganyu.
 4. If that returns an error, try:
 `$ python -m pip install -r requirements.txt`
 
-5. Create a config.json file in the root of this repo, this file contains the token to the account you want to host the bot on. commands_guild refers to the guild the bot is going to register it's commands to, as registering them globally usually takes ~1-2 hours. The file's content must match this format:
+5. Create a config.json file in the root of this repo, this file contains the token to the account you want to host the bot on. commands_guild refers to the guild the bot is going to register it's commands to, as registering them globally usually takes ~1-2 hours. prefix refers to the prefix you want to use for prefix commands. The file's content must match this format:
 ```json
 {
   "token": "<account_token>",
-  "commands_guild": "<your_server_id>"
+  "commands_guild": "<your_server_id>",
+  "prefix": "<prefix>"
 }
 ```
 
