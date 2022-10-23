@@ -18,7 +18,6 @@ class Ganyu(Client):
     def __init__(self):
         super().__init__(intents=discord.Intents.all())
         self.synced = False
-        self.welcomeChannel: str = None
               
     async def on_ready(self):
         await bot.change_presence(status=discord.Status.idle, activity=discord.Game('with your data'))
