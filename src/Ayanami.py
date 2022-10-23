@@ -4,7 +4,7 @@ TOKEN = json.loads(open('config.json', 'r').read())['token']
 
 import discord
 from discord.ext import commands
-from discord import app_commands
+from discord import Member, app_commands
 bot: commands.Bot = commands.Bot(command_prefix="g.", intents=discord.Intents.all())
 
 from logger import log
@@ -36,6 +36,22 @@ async def self(interaction: discord.Interaction):
 async def self(interaction: discord.Interaction, query: str):
     responses = ["It is certain.","It is decidedly so.","Without a doubt.","Yes definitely.","You may rely on it.","As I see it, yes.","Most likely.","Outlook good.","Yes.","Signs point to yes.","Reply hazy, try again.","Ask again later.","Better not tell you now.","Cannot predict now.","Concentrate and ask again.","Don't count on it.","My reply is no.","My sources say no.","Outlook not so good.","Very doubtful."]
     await interaction.response.send_message(f'**Question:** {query}\n**Answer:** {random.choice(responses)}')
+    
+@tree.command(name='avatar', description="Returns a user's avatar", guild=discord.Object(id=980162247299059792))
+async def self(interaction: discord.Interaction, member: discord.Member = None):
+    if member == None:
+        member = interaction.user
+        
+    name = member.name + '#' + member.discriminator
+    pfp = member.display_avatar
+    color = member.color
+    
+    embed = discord.Embed(title='Avatar', color=color)
+    embed.set_author(name=name, icon_url=pfp.url)
+    embed.set_image(url=pfp.url)
+    
+    await interaction.response.send_message(embed=embed)
+    
 
 ## Legacy
 
