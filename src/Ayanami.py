@@ -1,6 +1,9 @@
 import json
-TOKEN = json.loads(open('config.json', 'r').read())['token']
-TEST_SERVER = json.loads(open('config.json', 'r').read())['commands_guild']
+
+with open('config.json', 'r') as f:
+    config = json.loads(f.read())
+TOKEN = config['token']
+TEST_SERVER = config['commands_guild']
 
 import discord
 from discord.ext import commands
@@ -40,7 +43,7 @@ async def self(interaction: discord.Interaction, query: str):
     
 @tree.command(name='avatar', description="Returns a user's avatar", guild=discord.Object(id=TEST_SERVER))
 async def self(interaction: discord.Interaction, member: discord.Member = None):
-    if member == None:
+    if member is None:
         member = interaction.user
         
     name = member.name + '#' + member.discriminator
