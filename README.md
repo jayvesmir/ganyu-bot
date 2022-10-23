@@ -28,7 +28,7 @@ Ganyu is cool. Live, Laugh, Love, Ganyu.
 
 6. Start the bot. The initial output should closely match this:
 ```
-$ python src/Ayanami.py
+$ python Ayanami.py
 
 <date n time> INFO     discord.client logging in using static token
 <date n time> INFO     discord.gateway Shard ID None has connected to Gateway. (<session_id>)
