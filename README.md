@@ -22,7 +22,7 @@ Ganyu is cool. Live, Laugh, Love, Ganyu.
 ```json
 {
   "token": "<account_token>",
-  "commands_guild": "<you_server_id>"
+  "commands_guild": "<your_server_id>"
 }
 ```
 
