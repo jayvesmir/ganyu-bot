@@ -34,9 +34,9 @@ tree = app_commands.CommandTree(bot)
 
 @bot.event
 async def on_member_join(member):
-    if not bot.welcomeChannel:
-        channel = member.guild.system_channel
-    await channel.send(f'{member.mention} Welcome To The Server!')
+    channel = member.guild.system_channel
+    if channel:
+        await channel.send(f'{member.mention} Welcome To The Server!')
     
 @bot.event
 async def on_message(ctx):
