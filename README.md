@@ -16,7 +16,7 @@ Ganyu is cool. Live, Laugh, Love, Ganyu.
 `$ pip install -r requirements.txt`
 
 4. If that returns an error, try:
-`$ python -m pip install -r requirements`
+`$ python -m pip install -r requirements.txt`
 
 5. Create a config.json file in the root of this repo, this file contains the token to the account you want to host the bot on. commands_guild refers to the guild the bot is going to register it's commands to, as registering them globally usually takes ~1-2 hours. The file's content must match this format:
 ```json
