@@ -6,6 +6,11 @@ import os
 DB_PATH = 'ganyuDB/db/users.db'
 
 def dbExists(path: str) -> bool:
+    try:
+        os.makedirs(os.path.dirname(path))
+        log('DB').info('Created db folder.')
+    except OSError:
+        log('DB').info('db folder exists.')
     return True if os.path.exists(path) else False
 
 def userExists(id: str, uid: str) -> int:
