@@ -1,5 +1,6 @@
 from logger import log
 from commands import processCommands
+from ganyuDB import ganyuDB as gdb
 
 import json
 import discord
@@ -67,5 +68,44 @@ async def self(interaction: discord.Interaction, member: Member = None):
     embed.set_image(url=pfp.url)
     
     await interaction.response.send_message(embed=embed)
+    
+@tree.command(name='account', description="Connects your UID to your discord account.", guild=TEST_SERVER if IS_DEBUG else None)
+async def self(interaction: discord.Interaction, uid: str):
+    name = interaction.user.name + '#' + interaction.user.discriminator
+    pfp = interaction.user.display_avatar
+    
+    if uid is None:
+        desc = f'Please supply a UID to connect to {name}'
+        embed = discord.Embed(description=desc)
+        embed.set_author(name='Error', icon_url=pfp.url)
+        await interaction.response.send_message(embed=embed)
+        return
+    
+    # TODO: validate UID
+    
+    e = gdb.createUser(interaction.user.id, uid)
+    match e: # TODO: Rewrite this in a more backwards-compatible way. (Python 3.10)
+        case 0:
+            desc = f'**Successfully connected your account to {uid=}**'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Success', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+            return
+        case 1:
+            _uid = gdb.getUID(interaction.user.id)
+            desc = f'**There already is a UID connected to your account.** ({_uid[0]})\n\nUse **/account update** to change it.'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Error', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+            return
+        case 2:
+            _id = int(gdb.getID(uid)[0])
+            _mention = bot.get_user(_id).mention
+            desc = f'**This UID is already connected to another user.** ({_mention})'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Error', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+            return
+        
     
 bot.run(TOKEN)

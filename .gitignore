@@ -4,3 +4,5 @@ venv/
 
 # Files
 config.json
+cleanup.bat
+ganyuDB/db/*

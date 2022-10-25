@@ -1,1 +1,1 @@
-from commands.commandProcessor import processCommands
+from .commandProcessor import processCommands
