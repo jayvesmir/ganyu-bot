@@ -14,13 +14,13 @@ PREFIX: str = jsonConfig['prefix']
 
 from discord.ext import commands
 from discord import Member, Client, app_commands
-bot: commands.Bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
+bot: commands.Bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.default())
 
 import random
 
 class Ganyu(Client):
     def __init__(self):
-        super().__init__(intents=discord.Intents.all())
+        super().__init__(intents=discord.Intents.default())
         self.synced = False
               
     async def on_ready(self):
@@ -92,20 +92,54 @@ async def self(interaction: discord.Interaction, uid: str):
             await interaction.response.send_message(embed=embed)
             return
         case 1:
-            _uid = gdb.getUID(interaction.user.id)
-            desc = f'**There already is a UID connected to your account.** ({_uid[0]})\n\nUse **/account update** to change it.'
+            _uid = gdb.getUID(interaction.user.id)[0]
+            desc = f'**There already is a UID connected to your account.** ({_uid})\n\nUse **/account-update** to change it.'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
             return
         case 2:
             _id = int(gdb.getID(uid)[0])
-            _mention = bot.get_user(_id).mention
-            desc = f'**This UID is already connected to another user.** ({_mention})'
+            desc = f'**This UID is already connected to another user.** ({_id=})'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
             return
         
+@tree.command(name='account-update', description="Updates the UID connected to your discord account.", guild=TEST_SERVER if IS_DEBUG else None)
+async def self(interaction: discord.Interaction, uid: str):
+    name = interaction.user.name + '#' + interaction.user.discriminator
+    pfp = interaction.user.display_avatar
+    
+    if uid is None:
+        desc = f'Please supply a UID to connect to {name}'
+        embed = discord.Embed(description=desc)
+        embed.set_author(name='Error', icon_url=pfp.url)
+        await interaction.response.send_message(embed=embed)
+        return
+    
+    # TODO: validate UID
+
+    e = gdb.updateUser(interaction.user.id, uid)
+    match e:
+        case 0:
+            desc = f'**Successfully updated your UID to {uid}**'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Success', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+            return
+        case 2:
+            _id = int(gdb.getID(uid)[0])
+            desc = f'**This UID is already connected to another user.** ({_id=})'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Error', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+            return
+        case 3:
+            desc = f'**There was an error with the database, try running /account and connecting your account again.**'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Error', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+            return
     
 bot.run(TOKEN)

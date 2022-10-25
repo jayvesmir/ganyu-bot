@@ -10,17 +10,10 @@ def dbExists(path: str) -> bool:
         os.makedirs(os.path.dirname(path))
         log('DB').info('Created db folder.')
     except OSError:
-        log('DB').info('db folder exists.')
-    return True if os.path.exists(path) else False
+        pass
+    return os.path.exists(path)
 
 def userExists(id: str, uid: str) -> int:
-    """
-    Error Codes:
-        0 - no error
-        1 - id registered
-        2 - uid registered
-    """
-    
     db = sqlite.connect(DB_PATH)
     c = db.cursor()
     
@@ -37,6 +30,27 @@ def userExists(id: str, uid: str) -> int:
         return 2
     
     return 0
+
+def userExistsVerbose(id, uid: str) -> tuple:
+    db = sqlite.connect(DB_PATH)
+    c = db.cursor()
+    
+    _id = False
+    _uid = False
+    
+    c.execute(f'SELECT * FROM users WHERE id = {id}')
+    val = c.fetchall()
+    numEntries = len(val)
+    if numEntries > 0:
+        _id = True
+    
+    c.execute(f'SELECT * FROM users WHERE uid = {uid}')
+    val = c.fetchall()
+    numEntries = len(val)
+    if numEntries > 0:
+        _uid = True
+
+    return (_id, _uid)
 
 class UID:
     pass
@@ -56,6 +70,12 @@ class ganyuDB:
         return c.fetchall()[-1]
         
     def createUser(id: str, uid: str) -> int:
+        """
+        Error Codes:
+            0 - no error
+            1 - id registered
+            2 - uid registered
+        """
         exists = dbExists(DB_PATH)
         open(DB_PATH, 'wb').close() if not exists else None
         db = sqlite.connect(DB_PATH)
@@ -77,6 +97,45 @@ class ganyuDB:
         _id = user[0]
         _uid = user[1]
         log('DB').info(f'Created user: {_id}, {_uid}')
+
+        db.close()
+        return 0
+    
+    def updateUser(id: str, uid: str) -> int:
+        """
+        Error Codes:
+            0 - no error
+            2 - uid registered
+            3 - db error
+        """
+        exists = dbExists(DB_PATH)
+        open(DB_PATH, 'wb').close() if not exists else None
+        db = sqlite.connect(DB_PATH)
+        c = db.cursor()
+        if not exists:
+            c.execute('CREATE TABLE users (id text, uid text)')
+            db.commit()
+            log('DB').error(f'Database error.')
+            return 3
+            
+        e = userExistsVerbose(id, uid)
+        if e[0] and e[1]:
+            return 2
+        elif not e[0] and not e[1]:
+            c.execute(f'INSERT INTO users VALUES ({id}, {uid})')
+            db.commit()
+            return 0
+        
+        __uid = ganyuDB.getUID(id)[0]
+        c.execute(f'UPDATE users SET uid = {uid} WHERE id = {id}')
+        db.commit()
+        
+        c.execute(f'SELECT * FROM users WHERE id = {id}')
+        
+        user = c.fetchall()[-1]
+        _id = user[0]
+        _uid = user[1]
+        log('DB').info(f'Updated user: {_id}, {__uid} - {_uid}')
 
         db.close()
         return 0
