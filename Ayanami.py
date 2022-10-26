@@ -82,8 +82,12 @@ async def self(interaction: discord.Interaction, uid: str):
         await interaction.response.send_message(embed=embed)
         return
     
-    # TODO: validate UID
-    validateUID(uid)
+    if not validateUID(uid)[0]:
+        desc = f'**Invalid UID**'
+        embed = discord.Embed(description=desc)
+        embed.set_author(name='Error', icon_url=pfp.url)
+        await interaction.response.send_message(embed=embed)
+        return
     
     e = gdb.createUser(interaction.user.id, uid)
     match e: # TODO: Rewrite this in a more backwards-compatible way. (Python 3.10)
@@ -117,7 +121,12 @@ async def self(interaction: discord.Interaction, uid: str):
         await interaction.response.send_message(embed=embed)
         return
     
-    # TODO: validate UID
+    if not validateUID(uid)[0]:
+        desc = f'**Invalid UID**'
+        embed = discord.Embed(description=desc)
+        embed.set_author(name='Error', icon_url=pfp.url)
+        await interaction.response.send_message(embed=embed)
+        return
 
     e = gdb.updateUser(interaction.user.id, uid)
     match e: # TODO: Rewrite this in a more backwards-compatible way. (Python 3.10)
@@ -141,8 +150,6 @@ async def self(interaction: discord.Interaction, uid: str):
 @tree.command(name='account-remove', description="Removes your record from the database.", guild=TEST_SERVER if IS_DEBUG else None)
 async def self(interaction: discord.Interaction):
     pfp = interaction.user.display_avatar
-    
-    # TODO: validate UID
 
     e = gdb.removeUser(interaction.user.id)
     match e: # TODO: Rewrite this in a more backwards-compatible way. (Python 3.10)
