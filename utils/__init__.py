@@ -1,0 +1,1 @@
+from .genshin import validateUID

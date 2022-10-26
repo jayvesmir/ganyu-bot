@@ -1,6 +1,7 @@
 from logger import log
 from commands import processCommands
 from ganyuDB import ganyuDB as gdb
+from utils import validateUID
 
 import json
 import discord
@@ -82,29 +83,27 @@ async def self(interaction: discord.Interaction, uid: str):
         return
     
     # TODO: validate UID
+    validateUID(uid)
     
     e = gdb.createUser(interaction.user.id, uid)
     match e: # TODO: Rewrite this in a more backwards-compatible way. (Python 3.10)
         case 0:
-            desc = f'**Successfully connected your account to {uid=}**'
+            desc = f'**Successfully connected your account to {uid}**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Success', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
-            return
         case 1:
             _uid = gdb.getUID(interaction.user.id)[0]
             desc = f'**There already is a UID connected to your account.** ({_uid})\n\nUse **/account-update** to change it.'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
-            return
         case 2:
             _id = int(gdb.getID(uid)[0])
             desc = f'**This UID is already connected to another user.** ({_id=})'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
-            return
         
 @tree.command(name='account-update', description="Updates the UID connected to your discord account.", guild=TEST_SERVER if IS_DEBUG else None)
 async def self(interaction: discord.Interaction, uid: str):
@@ -121,25 +120,46 @@ async def self(interaction: discord.Interaction, uid: str):
     # TODO: validate UID
 
     e = gdb.updateUser(interaction.user.id, uid)
-    match e:
+    match e: # TODO: Rewrite this in a more backwards-compatible way. (Python 3.10)
         case 0:
-            desc = f'**Successfully updated your UID to {uid}**'
+            desc = f'**Successfully updated your UID to {uid}.**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Success', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
-            return
         case 2:
             _id = int(gdb.getID(uid)[0])
             desc = f'**This UID is already connected to another user.** ({_id=})'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
-            return
         case 3:
             desc = f'**There was an error with the database, try running /account and connecting your account again.**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
             await interaction.response.send_message(embed=embed)
-            return
+        
+@tree.command(name='account-remove', description="Removes your record from the database.", guild=TEST_SERVER if IS_DEBUG else None)
+async def self(interaction: discord.Interaction):
+    pfp = interaction.user.display_avatar
+    
+    # TODO: validate UID
+
+    e = gdb.removeUser(interaction.user.id)
+    match e: # TODO: Rewrite this in a more backwards-compatible way. (Python 3.10)
+        case 0:
+            desc = f'**Successfully removed your UID.**'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Success', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+        case 2:
+            desc = f'**There are no records to delete.**'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Error', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
+        case 3:
+            desc = f'**There was an error with the database.**'
+            embed = discord.Embed(description=desc)
+            embed.set_author(name='Error', icon_url=pfp.url)
+            await interaction.response.send_message(embed=embed)
     
 bot.run(TOKEN)

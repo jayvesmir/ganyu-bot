@@ -1,6 +1,5 @@
 import sqlite3 as sqlite
 from logger import log
-import genshin
 import os
 
 DB_PATH = 'ganyuDB/db/users.db'
@@ -61,13 +60,19 @@ class ganyuDB:
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
         c.execute(f'SELECT uid FROM users WHERE id = {id}')
-        return c.fetchall()[-1]
+        try:
+            return c.fetchall()[-1]
+        except IndexError:
+            return (None,)
     
     def getID(uid: str) -> str:
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
         c.execute(f'SELECT id FROM users WHERE uid = {uid}')
-        return c.fetchall()[-1]
+        try:
+            return c.fetchall()[-1]
+        except IndexError:
+            return (None,)
         
     def createUser(id: str, uid: str) -> int:
         """
@@ -125,8 +130,10 @@ class ganyuDB:
             c.execute(f'INSERT INTO users VALUES ({id}, {uid})')
             db.commit()
             return 0
+        elif not e[0] and e[1]:
+            return 2
         
-        __uid = ganyuDB.getUID(id)[0]
+        __uid = ganyuDB.getUID(id)[0] if not e[0] else None
         c.execute(f'UPDATE users SET uid = {uid} WHERE id = {id}')
         db.commit()
         
@@ -136,6 +143,36 @@ class ganyuDB:
         _id = user[0]
         _uid = user[1]
         log('DB').info(f'Updated user: {_id}, {__uid} - {_uid}')
+
+        db.close()
+        return 0
+    
+    def removeUser(id: str) -> int:
+        """
+        Error Codes:
+            0 - no error
+            2 - nothing to delete
+            3 - db error
+        """
+        exists = dbExists(DB_PATH)
+        open(DB_PATH, 'wb').close() if not exists else None
+        db = sqlite.connect(DB_PATH)
+        c = db.cursor()
+        if not exists:
+            c.execute('CREATE TABLE users (id text, uid text)')
+            db.commit()
+            log('DB').error(f'Database error.')
+            return 3
+            
+        e = userExistsVerbose(id, ganyuDB.getUID(id)[0])
+        if not e[0] and not e[1]:
+            return 2
+        
+        __uid = ganyuDB.getUID(id)[0]
+        c.execute(f'DELETE FROM users WHERE id = {id}')
+        db.commit()
+        
+        log('DB').info(f'Deleted user: {id}, {__uid}')
 
         db.close()
         return 0
