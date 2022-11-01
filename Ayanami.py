@@ -3,6 +3,7 @@ from commands import processCommands
 from ganyuDB import ganyuDB as gdb
 from utils import validateUID
 
+import re
 import json
 import discord
 
@@ -79,14 +80,23 @@ async def self(interaction: discord.Interaction, uid: str):
         desc = f'Please supply a UID to connect to {name}'
         embed = discord.Embed(description=desc)
         embed.set_author(name='Error', icon_url=pfp.url)
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
         return
     
-    if not validateUID(uid)[0]:
+    uidV = await validateUID(uid)
+
+    if not uidV[0]:
         desc = f'**Invalid UID**'
         embed = discord.Embed(description=desc)
         embed.set_author(name='Error', icon_url=pfp.url)
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+    
+    if not uidV[2]:
+        desc = f"**That UID doesn't exist.**"
+        embed = discord.Embed(description=desc)
+        embed.set_author(name='Error', icon_url=pfp.url)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
         return
     
     e = gdb.createUser(interaction.user.id, uid)
@@ -95,19 +105,20 @@ async def self(interaction: discord.Interaction, uid: str):
             desc = f'**Successfully connected your account to {uid}**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Success', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            embed.add_field(name='UID Validation Layers', value=f'**IsValid:** {uidV[0]}\n**Exists:** {uidV[2]}\n**Server Region:** {uidV[1]}\n**Creation Rank:** {uidV[3]}\n')
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         case 1:
             _uid = gdb.getUID(interaction.user.id)[0]
             desc = f'**There already is a UID connected to your account.** ({_uid})\n\nUse **/account-update** to change it.'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         case 2:
             _id = int(gdb.getID(uid)[0])
             desc = f'**This UID is already connected to another user.** ({_id=})'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         
 @tree.command(name='account-update', description="Updates the UID connected to your discord account.", guild=TEST_SERVER if IS_DEBUG else None)
 async def self(interaction: discord.Interaction, uid: str):
@@ -118,14 +129,23 @@ async def self(interaction: discord.Interaction, uid: str):
         desc = f'Please supply a UID to connect to {name}'
         embed = discord.Embed(description=desc)
         embed.set_author(name='Error', icon_url=pfp.url)
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
         return
     
-    if not validateUID(uid)[0]:
+    uidV = await validateUID(uid)
+
+    if not uidV[0]:
         desc = f'**Invalid UID**'
         embed = discord.Embed(description=desc)
         embed.set_author(name='Error', icon_url=pfp.url)
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        return
+    
+    if not uidV[2]:
+        desc = f"**That UID doesn't exist.**"
+        embed = discord.Embed(description=desc)
+        embed.set_author(name='Error', icon_url=pfp.url)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
     e = gdb.updateUser(interaction.user.id, uid)
@@ -134,18 +154,19 @@ async def self(interaction: discord.Interaction, uid: str):
             desc = f'**Successfully updated your UID to {uid}.**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Success', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            embed.add_field(name='UID Validation Layers', value=f'**IsValid:** {uidV[0]}\n**Exists:** {uidV[2]}\n**Server Region:** {uidV[1]}\n**Creation Rank:** {uidV[3]}\n')
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         case 2:
             _id = int(gdb.getID(uid)[0])
             desc = f'**This UID is already connected to another user.** ({_id=})'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         case 3:
             desc = f'**There was an error with the database, try running /account and connecting your account again.**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         
 @tree.command(name='account-remove', description="Removes your record from the database.", guild=TEST_SERVER if IS_DEBUG else None)
 async def self(interaction: discord.Interaction):
@@ -157,16 +178,26 @@ async def self(interaction: discord.Interaction):
             desc = f'**Successfully removed your UID.**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Success', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         case 2:
             desc = f'**There are no records to delete.**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         case 3:
             desc = f'**There was an error with the database.**'
             embed = discord.Embed(description=desc)
             embed.set_author(name='Error', icon_url=pfp.url)
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+            
+@tree.command(name='account-add-cookie', description="connects your genshin account cookie to your discord account (optional)", guild=TEST_SERVER if IS_DEBUG else None)
+async def self(interaction: discord.Interaction, cookie: str = "nocookie"):
+    pfp = interaction.user.display_avatar
+    desc = f'**Please be patient, this command should be available soon.**'
+    embed = discord.Embed(description=desc)
+    embed.set_author(name='Error', icon_url=pfp.url, title='Command not Implemented!')
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+    
+    # TODO: Pretty self explanatory.
     
 bot.run(TOKEN)

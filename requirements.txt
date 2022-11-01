@@ -1,2 +1,5 @@
 discord.py @ git+https://github.com/Rapptz/discord.py@01915fbc095a72ffd2231c72b7c0892a377a477c
 genshin @ git+https://github.com/thesadru/genshin.py@30864e5f6837feb8f0fa9c72681b11408bf35910
+enka.py==1.0.10
+ujson==5.5.0
+msgpack==1.0.4

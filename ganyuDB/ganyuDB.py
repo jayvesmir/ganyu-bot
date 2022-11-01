@@ -16,13 +16,13 @@ def userExists(_id: str, _uid: str) -> int:
     db = sqlite.connect(DB_PATH)
     c = db.cursor()
     
-    c.execute(f'SELECT * FROM users WHERE id = :id', {'id', _id})
+    c.execute('SELECT * FROM users WHERE id = :id', {"id": _id})
     val = c.fetchall()
     numEntries = len(val)
     if numEntries > 0:
         return 1
     
-    c.execute('SELECT * FROM users WHERE uid = :uid', {'uid': _uid})
+    c.execute('SELECT * FROM users WHERE uid = :uid', {"uid": _uid})
     val = c.fetchall()
     numEntries = len(val)
     if numEntries > 0:
@@ -30,20 +30,20 @@ def userExists(_id: str, _uid: str) -> int:
     
     return 0
 
-def userExistsVerbose(_id, _uid: str) -> tuple:
+def userExistsVerbose(_id: str, _uid: str) -> tuple:
     db = sqlite.connect(DB_PATH)
     c = db.cursor()
     
     _id = False
     _uid = False
     
-    c.execute(f'SELECT * FROM users WHERE id = :id', {'id', _id})
+    c.execute('SELECT * FROM users WHERE id = :id', {"id": _id})
     val = c.fetchall()
     numEntries = len(val)
     if numEntries > 0:
         _id = True
     
-    c.execute('SELECT * FROM users WHERE uid = :uid', {'uid': _uid})
+    c.execute('SELECT * FROM users WHERE uid = :uid', {"uid": _uid})
     val = c.fetchall()
     numEntries = len(val)
     if numEntries > 0:
@@ -59,7 +59,7 @@ class ganyuDB:
     def getUID(_id: str) -> str:
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
-        c.execute('SELECT uid FROM users WHERE id = :id', {'id', _id})
+        c.execute('SELECT uid FROM users WHERE id = :id', {"id", _id})
         try:
             return c.fetchall()[-1]
         except IndexError:
@@ -68,7 +68,7 @@ class ganyuDB:
     def getID(_uid: str) -> str:
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
-        c.execute(f'SELECT id FROM users WHERE uid = :uid', {'uid', _uid})
+        c.execute(f'SELECT id FROM users WHERE uid = :uid', {"uid", _uid})
         try:
             return c.fetchall()[-1]
         except IndexError:
@@ -96,7 +96,7 @@ class ganyuDB:
         c.execute('INSERT INTO users VALUES (?, ?)', (id, uid))
         db.commit()
         
-        c.execute('SELECT * FROM users WHERE id = :id', {'id': id})
+        c.execute('SELECT * FROM users WHERE id = :id', {"id": id})
         
         user = c.fetchall()[-1]
         _id = user[0]
@@ -134,10 +134,10 @@ class ganyuDB:
             return 2
         
         __uid = ganyuDB.getUID(id)[0] if not e[0] else None
-        c.execute('UPDATE users SET uid = :uid WHERE id = :id', {'id': id, 'uid': uid})
+        c.execute('UPDATE users SET uid = :uid WHERE id = :id', {"id": id, "uid": uid})
         db.commit()
         
-        c.execute('SELECT * FROM users WHERE id = :id', {'id': id})
+        c.execute('SELECT * FROM users WHERE id = :id', {"id": id})
         
         user = c.fetchall()[-1]
         _id = user[0]
@@ -169,7 +169,7 @@ class ganyuDB:
             return 2
         
         __uid = ganyuDB.getUID(id)[0]
-        c.execute('DELETE FROM users WHERE id = :id', {'id': id})
+        c.execute('DELETE FROM users WHERE id = :id', {"id": id})
         db.commit()
         
         log('DB').info(f'Deleted user: {id}, {__uid}')
