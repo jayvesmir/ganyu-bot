@@ -1,5 +1,5 @@
 from logger import log
-from enkapy import Enka, UIDNotFounded
+from enkapy import Enka, UIDNotFounded, ValidateUIDError
 
 def UIDValidity(uid: str) -> str:
     if len(uid) != 9:
@@ -28,6 +28,8 @@ def UIDRegion(uid: str) -> str:
     return True
 
 async def UIDExists(uid: int) -> bool:
+    if not UIDValidity(str(uid)):
+        return False
     try:
         client = Enka()
         await client.fetch_user(uid)
