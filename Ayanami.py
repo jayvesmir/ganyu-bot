@@ -1,18 +1,12 @@
-from logger import log
-from ganyuDB import ganyuDB as gdb
-from utils import validateUID
-
-import re
-import discord
 from pathlib import Path
 
-from config import TOKEN, PREFIX
-
+import discord
 from discord.ext import commands
-from discord import Member, Client, app_commands
-bot: commands.Bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
+from discord.ext.commands import ExtensionAlreadyLoaded, ExtensionFailed, ExtensionNotLoaded, NoEntryPointError
 
-import random
+from logger import log
+from config import TOKEN, PREFIX
+bot: commands.Bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
 
 class Ganyu(commands.Bot):
     def __init__(self):
@@ -24,7 +18,7 @@ class Ganyu(commands.Bot):
             cogName = Path(filepath).stem
             try:
                 await self.load_extension(f"cogs.{cogName}")
-            except Exception as e:
+            except (ExtensionAlreadyLoaded, ExtensionFailed, ExtensionNotLoaded, NoEntryPointError) as e:
                 log('CogLoader').warning(f'Failed to load {cogName}\n {e}')
 
     async def on_member_join(self, member):
@@ -37,5 +31,4 @@ class Ganyu(commands.Bot):
         log().info(f'Ganyu is online as {bot.user}.')
 
 bot = Ganyu()
-    
 bot.run(TOKEN)

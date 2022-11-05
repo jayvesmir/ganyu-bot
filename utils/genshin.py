@@ -1,5 +1,5 @@
+from enkapy import Enka, UIDNotFounded
 from logger import log
-from enkapy import Enka, UIDNotFounded, ValidateUIDError
 
 def UIDValidity(uid: str) -> str:
     if len(uid) != 9:

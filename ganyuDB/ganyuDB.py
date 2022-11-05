@@ -1,6 +1,7 @@
-import sqlite3 as sqlite
-from logger import log
 import os
+import sqlite3 as sqlite
+
+from logger import log
 
 DB_PATH = 'ganyuDB/db/users.db'
 
@@ -15,34 +16,34 @@ def dbExists(path: str) -> bool:
 def userExists(_id: str, _uid: str) -> int:
     db = sqlite.connect(DB_PATH)
     c = db.cursor()
-    
+
     c.execute('SELECT * FROM users WHERE id = :id', {"id": _id})
     val = c.fetchall()
     numEntries = len(val)
     if numEntries > 0:
         return 1
-    
+
     c.execute('SELECT * FROM users WHERE uid = :uid', {"uid": _uid})
     val = c.fetchall()
     numEntries = len(val)
     if numEntries > 0:
         return 2
-    
+
     return 0
 
 def userExistsVerbose(_id: str, _uid: str) -> tuple:
     db = sqlite.connect(DB_PATH)
     c = db.cursor()
-    
+
     _id = False
     _uid = False
-    
+
     c.execute('SELECT * FROM users WHERE id = :id', {"id": _id})
     val = c.fetchall()
     numEntries = len(val)
     if numEntries > 0:
         _id = True
-    
+
     c.execute('SELECT * FROM users WHERE uid = :uid', {"uid": _uid})
     val = c.fetchall()
     numEntries = len(val)
@@ -51,11 +52,9 @@ def userExistsVerbose(_id: str, _uid: str) -> tuple:
 
     return (_id, _uid)
 
-class UID:
-    pass
-
 class ganyuDB:
-    
+
+    @staticmethod
     def getUID(_id: str) -> str:
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
@@ -64,17 +63,19 @@ class ganyuDB:
             return c.fetchall()[-1]
         except IndexError:
             return (None,)
-    
+
+    @staticmethod
     def getID(_uid: str) -> str:
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
-        c.execute(f'SELECT id FROM users WHERE uid = :uid', {"uid", _uid})
+        c.execute('SELECT id FROM users WHERE uid = :uid', {"uid", _uid})
         try:
             return c.fetchall()[-1]
         except IndexError:
             return (None,)
-        
-    def createUser(id: str, uid: str) -> int:
+
+    @staticmethod
+    def createUser(_id: str, _uid: str) -> int:
         """
         Error Codes:
             0 - no error
@@ -82,22 +83,22 @@ class ganyuDB:
             2 - uid registered
         """
         exists = dbExists(DB_PATH)
-        open(DB_PATH, 'wb').close() if not exists else None
+        _ = open(DB_PATH, 'wb').close() if not exists else None
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
         if not exists:
             c.execute('CREATE TABLE users (id text, uid text)')
             db.commit()
-            
-        e = userExists(id, uid)
+
+        e = userExists(_id, _uid)
         if e > 0:
             return e
-            
-        c.execute('INSERT INTO users VALUES (?, ?)', (id, uid))
+
+        c.execute('INSERT INTO users VALUES (?, ?)', (_id, _uid))
         db.commit()
-        
-        c.execute('SELECT * FROM users WHERE id = :id', {"id": id})
-        
+
+        c.execute('SELECT * FROM users WHERE id = :id', {"id": _id})
+
         user = c.fetchall()[-1]
         _id = user[0]
         _uid = user[1]
@@ -105,8 +106,9 @@ class ganyuDB:
 
         db.close()
         return 0
-    
-    def updateUser(id: str, uid: str) -> int:
+
+    @staticmethod
+    def updateUser(_id: str, _uid: str) -> int:
         """
         Error Codes:
             0 - no error
@@ -114,31 +116,31 @@ class ganyuDB:
             3 - db error
         """
         exists = dbExists(DB_PATH)
-        open(DB_PATH, 'wb').close() if not exists else None
+        _ = open(DB_PATH, 'wb').close() if not exists else None
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
         if not exists:
             c.execute('CREATE TABLE users (id text, uid text)')
             db.commit()
-            log('DB').error(f'Database error.')
+            log('DB').error('Database error.')
             return 3
-            
-        e = userExistsVerbose(id, uid)
+
+        e = userExistsVerbose(_id, _uid)
         if e[0] and e[1]:
             return 2
         elif not e[0] and not e[1]:
-            c.execute('INSERT INTO users VALUES (?, ?)', (id, uid))
+            c.execute('INSERT INTO users VALUES (?, ?)', (_id, _uid))
             db.commit()
             return 0
         elif not e[0] and e[1]:
             return 2
-        
-        __uid = ganyuDB.getUID(id)[0] if not e[0] else None
-        c.execute('UPDATE users SET uid = :uid WHERE id = :id', {"id": id, "uid": uid})
+
+        __uid = ganyuDB.getUID(_id)[0] if not e[0] else None
+        c.execute('UPDATE users SET uid = :uid WHERE id = :id', {"id": _id, "uid": _uid})
         db.commit()
-        
-        c.execute('SELECT * FROM users WHERE id = :id', {"id": id})
-        
+
+        c.execute('SELECT * FROM users WHERE id = :id', {"id": _id})
+
         user = c.fetchall()[-1]
         _id = user[0]
         _uid = user[1]
@@ -147,7 +149,8 @@ class ganyuDB:
         db.close()
         return 0
     
-    def removeUser(id: str) -> int:
+    @staticmethod
+    def removeUser(_id: str) -> int:
         """
         Error Codes:
             0 - no error
@@ -155,24 +158,24 @@ class ganyuDB:
             3 - db error
         """
         exists = dbExists(DB_PATH)
-        open(DB_PATH, 'wb').close() if not exists else None
+        _ = open(DB_PATH, 'wb').close() if not exists else None
         db = sqlite.connect(DB_PATH)
         c = db.cursor()
         if not exists:
             c.execute('CREATE TABLE users (id text, uid text)')
             db.commit()
-            log('DB').error(f'Database error.')
+            log('DB').error('Database error.')
             return 3
-            
-        e = userExistsVerbose(id, ganyuDB.getUID(id)[0])
+
+        e = userExistsVerbose(_id, ganyuDB.getUID(_id)[0])
         if not e[0] and not e[1]:
             return 2
-        
-        __uid = ganyuDB.getUID(id)[0]
-        c.execute('DELETE FROM users WHERE id = :id', {"id": id})
+
+        __uid = ganyuDB.getUID(_id)[0]
+        c.execute('DELETE FROM users WHERE id = :id', {"id": _id})
         db.commit()
-        
-        log('DB').info(f'Deleted user: {id}, {__uid}')
+
+        log('DB').info(f'Deleted user: {_id}, {__uid}')
 
         db.close()
         return 0

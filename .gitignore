@@ -1,7 +1,8 @@
 # Directories
 venv/
-*/__pycache__/
+.vscode/
 __pycache__/
+*/__pycache__/
 
 # Files
 config.json
