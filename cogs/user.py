@@ -4,9 +4,6 @@ from discord.ext import commands
 from ganyuDB import ganyuDB as gdb
 from utils import validateUID
 
-class prefix():
-    pass
-
 class userCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

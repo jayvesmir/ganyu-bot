@@ -1,9 +1,6 @@
 from discord import app_commands, Interaction, Member, Embed
 from discord.ext import commands
 
-class prefix():
-    pass
-
 class utilityCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
