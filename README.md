@@ -1,9 +1,25 @@
-# Ganyu bot
-Ganyu is cool. Live, Laugh, Love, Ganyu.
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/67397386/200123150-25095e26-d4a5-4829-a382-3619d093bdba.png" width="300" height="300">
+</p>
+<h1>Ganyu</h1>
 
-- Extremely early in development!!! (So early in fact, that there aren't any other functions than ping.)
+<details open="open">
+<summary>Table of Contents</summary>
+
+- [About](#about)
+- [How to Self-Host](#how-to-self-host-ganyu-windows-only-)
+- [Contributing](#contributing)
+- [License](#license)
+
+</details>
+
+## About
+- Extremely early in development!!!
+- yeah ( ‾́ ◡ ‾́ )	
 
 ## How to self-host Ganyu (Windows only) (＾◡＾)
+
+- You can skip the first 4 steps by running this:  `$ ./prepare.ps1`
 
 1. Run this command in the ganyu-bot directory to create a virtual environment for the bot to run in.  
 `$ python -m venv venv`
@@ -33,3 +49,16 @@ $ python Ayanami.py
 <date n time> INFO     discord.gateway Shard ID None has connected to Gateway. (<session_id>)
 <date n time> INFO     discord.Ganyu Ganyu is online as <bot_account_name>.
 ```
+
+## Contributing
+
+Very WIP, All contributions are welcome!
+
+## License
+
+This project is licensed under the **MIT license**. Feel free to edit and distribute this template as you like.
+
+See [LICENSE](LICENSE) for more information.
+
+# Ganyu
+Ganyu is cool. Live, Laugh, Love, Ganyu.
