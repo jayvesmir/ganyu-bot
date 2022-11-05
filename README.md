@@ -1,9 +1,10 @@
-<p align="center">
+<div align="center" style="font-size:76px;">
   <img src="https://user-images.githubusercontent.com/67397386/200123150-25095e26-d4a5-4829-a382-3619d093bdba.png" width="300" height="300">
-</p>
-<h1>Ganyu</h1>
+  <br>
+  <h1 align="center">Ganyu</h1>
+</div>
 
-<details open="open">
+<details>
 <summary>Table of Contents</summary>
 
 - [About](#about)
@@ -55,7 +56,7 @@ Very WIP, All contributions are welcome!
 
 ## License
 
-This project is licensed under the **MIT license**. Feel free to edit and distribute this template as you like.
+This project is licensed under the **MIT license**. Feel free to edit and distribute it as you like.
 
 See [LICENSE](LICENSE) for more information.
 
