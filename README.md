@@ -7,6 +7,7 @@
 <summary>Table of Contents</summary>
 
 - [About](#about)
+- [How to Self-Host](#how-to-self-host-ganyu-windows-only-)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -16,7 +17,7 @@
 - Extremely early in development!!!
 - yeah ( ‾́ ◡ ‾́ )	
 
-#### How to self-host Ganyu (Windows only) (＾◡＾)
+## How to self-host Ganyu (Windows only) (＾◡＾)
 
 1. Run this command in the ganyu-bot directory to create a virtual environment for the bot to run in.  
 `$ python -m venv venv`
