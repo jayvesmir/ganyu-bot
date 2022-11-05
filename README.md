@@ -19,6 +19,8 @@
 
 ## How to self-host Ganyu (Windows only) (＾◡＾)
 
+- You can skip the first 4 steps by running this:  `$ ./prepare.ps1`
+
 1. Run this command in the ganyu-bot directory to create a virtual environment for the bot to run in.  
 `$ python -m venv venv`
 
