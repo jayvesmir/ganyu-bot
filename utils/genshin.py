@@ -69,5 +69,4 @@ async def validateUID(uid: str) -> list:
     r[1] = UIDRegion(uid)
     r[2] = await UIDExists(int(uid))
     r[3] = UIDCreationRank(uid)
-    log('UID').info(r)
     return r

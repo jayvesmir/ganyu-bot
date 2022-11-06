@@ -3,12 +3,10 @@ import random
 from discord import app_commands, Interaction
 from discord.ext import commands
 
-
 class eightballCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @staticmethod
     @app_commands.command(name='eightball', description='Rolls the 8ball.')
     async def eightball(interaction: Interaction, query: str):
         responses = ['It is certain.','It is decidedly so.','Without a doubt.',
@@ -21,4 +19,3 @@ class eightballCog(commands.Cog):
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(eightballCog(bot))
-    

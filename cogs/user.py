@@ -36,7 +36,7 @@ class userCog(commands.Cog):
             await i.response.send_message(embed=embed, ephemeral=True)
             return
 
-        e = gdb.createUser(i.user.id, uid)
+        e = self.bot.userDB.createUser(i.user.id, uid)
         match e: # Rewrite this in a more backwards-compatible way. (Python 3.10) TODO
             case 0:
                 desc = f'**Successfully connected your account to {uid}**'
@@ -48,14 +48,14 @@ class userCog(commands.Cog):
                                     {uidV[1]}\n**Creation Rank:** {uidV[3]}\n')
                 await i.response.send_message(embed=embed, ephemeral=True)
             case 1:
-                _uid = gdb.getUID(i.user.id)[0]
+                _uid = self.bot.userDB.getUID(i.user.id)[0]
                 desc = f'**There already is a UID connected to your account.**  \
                     ({_uid})\n\nUse **/account-update** to change it.'
                 embed = Embed(description=desc)
                 embed.set_author(name='Error', icon_url=pfp.url)
                 await i.response.send_message(embed=embed, ephemeral=True)
             case 2:
-                _id = int(gdb.getID(uid)[0])
+                _id = int(self.bot.userDB.getID(uid)[0])
                 desc = f'**This UID is already connected to another user.** ({_id=})'
                 embed = Embed(description=desc)
                 embed.set_author(name='Error', icon_url=pfp.url)
@@ -89,7 +89,7 @@ class userCog(commands.Cog):
             await i.response.send_message(embed=embed, ephemeral=True)
             return
 
-        e = gdb.updateUser(i.user.id, uid)
+        e = self.bot.userDB.updateUser(i.user.id, uid)
         match e: # Rewrite this in a more backwards-compatible way. (Python 3.10) TODO
             case 0:
                 desc = f'**Successfully updated your UID to {uid}.**'
@@ -101,7 +101,7 @@ class userCog(commands.Cog):
                                     {uidV[1]}\n**Creation Rank:** {uidV[3]}\n')
                 await i.response.send_message(embed=embed, ephemeral=True)
             case 2:
-                _id = int(gdb.getID(uid)[0])
+                _id = int(self.bot.userDB.getID(uid)[0])
                 desc = f'**This UID is already connected to another user.** ({_id=})'
                 embed = Embed(description=desc)
                 embed.set_author(name='Error', icon_url=pfp.url)
@@ -116,7 +116,7 @@ class userCog(commands.Cog):
     async def accountRemove(self, i: Interaction):
         pfp = i.user.display_avatar
 
-        e = gdb.removeUser(i.user.id)
+        e = self.bot.userDB.removeUser(i.user.id)
         match e: # Rewrite this in a more backwards-compatible way. (Python 3.10) TODO
             case 0:
                 desc = '**Successfully removed your UID.**'
