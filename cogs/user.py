@@ -57,6 +57,8 @@ class userCog(commands.Cog):
             case 2:
                 _id = int(self.bot.userDB.getID(uid)[0])
                 desc = f'**This UID is already connected to another user.** ({_id=})'
+                if _id == int(i.user.id):
+                    desc = '**This UID is already connected to your account.**'
                 embed = Embed(description=desc)
                 embed.set_author(name='Error', icon_url=pfp.url)
                 await i.response.send_message(embed=embed, ephemeral=True)
@@ -103,6 +105,8 @@ class userCog(commands.Cog):
             case 2:
                 _id = int(self.bot.userDB.getID(uid)[0])
                 desc = f'**This UID is already connected to another user.** ({_id=})'
+                if _id == int(i.user.id):
+                    desc = '**This UID is already connected to your account.**'
                 embed = Embed(description=desc)
                 embed.set_author(name='Error', icon_url=pfp.url)
                 await i.response.send_message(embed=embed, ephemeral=True)
