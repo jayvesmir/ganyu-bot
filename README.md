@@ -34,10 +34,11 @@
 4. If that returns an error, try:
 `$ python -m pip install -r requirements.txt`
 
-5. Create a config.json file in the root of this repo, this file contains the token to the account you want to host the bot on. Please keep in mind that slash commands may take up to 2 hours to register. (I might implement prefix commands later on.) The file's content must match this format:
+5. Create a config.json file in the root of this repo, this file contains the token to the account you want to host the bot on. Please keep in mind that slash commands may take up to 2 hours to register. (I might implement prefix commands later on. It's still required to initialize the bot though.) The file's content must match this format:
 ```json
 {
-  "token": "<account_token>"
+  "token": "<account_token>",
+  "prefix": "<prefix>"
 }
 ```
 
