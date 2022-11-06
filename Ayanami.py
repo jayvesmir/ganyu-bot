@@ -8,11 +8,10 @@ from discord.ext.commands import ExtensionAlreadyLoaded, ExtensionFailed, Extens
 from logger import log
 from ganyuDB import ganyuDB as gdb
 from config import TOKEN, PREFIX
-bot: commands.Bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
 
 class Ganyu(commands.Bot):
-    def __init__(self):
-        super().__init__(intents=discord.Intents.all(), command_prefix=PREFIX)
+    def __init__(self, _prefix: str):
+        super().__init__(intents=discord.Intents.all(), command_prefix=_prefix)
         self.synced = False
 
         if not gdb.dbExists('ganyuDB/db/users.db'):
@@ -38,8 +37,12 @@ class Ganyu(commands.Bot):
             await channel.send(f'{member.mention} Welcome To The Server!')
 
     async def on_ready(self):
-        await bot.change_presence(status=discord.Status.idle, activity=discord.Game('with your data'))
-        log().info(f'Ganyu is online as {bot.user}.')
+        await self.change_presence(status=discord.Status.idle, activity=discord.Game('with your data'))
+        log().info(f'Ganyu is online as {self.user}.')
 
-bot = Ganyu()
-bot.run(TOKEN)
+def main():
+    bot = Ganyu(PREFIX)
+    bot.run(TOKEN)
+
+if __name__ == '__main__':
+    main()
