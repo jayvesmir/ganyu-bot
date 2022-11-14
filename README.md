@@ -15,6 +15,7 @@
 </details>
 
 ## About
+- Progress is really slow right now as I don't have much time to work on anything due to school.
 - Extremely early in development!!!
 - yeah ( ‾́ ◡ ‾́ )	
 
