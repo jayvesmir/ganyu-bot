@@ -4,6 +4,7 @@ import sqlite3 as sqlite
 import discord
 from discord.ext import commands
 from discord.ext.commands import ExtensionAlreadyLoaded, ExtensionFailed, ExtensionNotLoaded, NoEntryPointError
+from enkapy import Enka
 
 from logger import log
 from ganyuDB import ganyuDB as gdb
@@ -22,6 +23,8 @@ class Ganyu(commands.Bot):
             conn.close()
             log('ganyuDB').info('Created database.')
         self.userDB = gdb(sqlite.connect('ganyuDB/db/users.db'))
+
+        self.enkaClient = Enka()
 
     async def setup_hook(self) -> None:
         for filepath in Path("./cogs").glob('**/*.py'):
