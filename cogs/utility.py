@@ -1,11 +1,15 @@
-from discord import app_commands, Interaction, Member, Embed
+from discord import app_commands, Interaction, Member, Embed, Object
 from discord.ext import commands
+
+from config import IS_DEBUG, DEBUG_GUILD
+DEBUG_GUILD = Object(DEBUG_GUILD)
 
 class utilityCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @app_commands.command(name='avatar', description="Returns a user's avatar")
+    @app_commands.guilds(DEBUG_GUILD if IS_DEBUG else None)
     async def avatar(self, i: Interaction, member: Member = None):
         if member is None:
             member = i.user

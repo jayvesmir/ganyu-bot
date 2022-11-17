@@ -1,15 +1,18 @@
-from discord import app_commands, Interaction, Embed
+from discord import app_commands, Interaction, Embed, Object
 from discord.ext import commands
 from enkapy import Enka
 
 from ganyuDB import ganyuDB as gdb
+from config import IS_DEBUG, DEBUG_GUILD
+DEBUG_GUILD = Object(DEBUG_GUILD)
 
 class genshinCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     # TODO: Rewrite to use buttons, only testing enka for now.
-    @app_commands.command(name='builds', description='Check if the bot lives.')
+    @app_commands.command(name='builds', description="Gets your character's builds.")
+    @app_commands.guilds(DEBUG_GUILD if IS_DEBUG else None)
     async def builds(self, i: Interaction):
         # TODO: Not be lazy and add a check for a user having a registered UID.
         client: Enka = self.bot.enkaClient

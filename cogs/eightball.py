@@ -1,13 +1,17 @@
 import random
 
-from discord import app_commands, Interaction
+from discord import app_commands, Interaction, Object
 from discord.ext import commands
+
+from config import IS_DEBUG, DEBUG_GUILD
+DEBUG_GUILD = Object(DEBUG_GUILD)
 
 class eightballCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @app_commands.command(name='eightball', description='Rolls the 8ball.')
+    @app_commands.guilds(DEBUG_GUILD if IS_DEBUG else None)
     async def eightball(interaction: Interaction, query: str):
         responses = ['It is certain.','It is decidedly so.','Without a doubt.',
                     'Yes definitely.','You may rely on it.','As I see it, yes.',

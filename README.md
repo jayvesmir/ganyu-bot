@@ -43,6 +43,16 @@
 }
 ```
 
+5.5 If you want to use the bot in debug mode, add these lines to the config.json file
+```json
+{
+  "token": "<account_token>",
+  "prefix": "<prefix>",
+  "is_debug": "true",
+  "debug_guild": "<your_guild_id>"
+}
+```
+
 6. Start the bot. The initial output should closely match this:
 ```
 $ python Ayanami.py

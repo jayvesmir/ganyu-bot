@@ -8,12 +8,11 @@ from enkapy import Enka
 
 from logger import log
 from ganyuDB import ganyuDB as gdb
-from config import TOKEN, PREFIX
+from config import TOKEN, PREFIX, IS_DEBUG
 
 class Ganyu(commands.Bot):
     def __init__(self, _prefix: str):
         super().__init__(intents=discord.Intents.all(), command_prefix=_prefix)
-        self.synced = False
 
         if not gdb.dbExists('ganyuDB/db/users.db'):
             conn = sqlite.connect('ganyuDB/db/users.db')
@@ -31,6 +30,7 @@ class Ganyu(commands.Bot):
             cogName = Path(filepath).stem
             try:
                 await self.load_extension(f"cogs.{cogName}")
+                log('CogLoader').info(f'Successfully loaded {cogName}')
             except (ExtensionAlreadyLoaded, ExtensionFailed, ExtensionNotLoaded, NoEntryPointError) as e:
                 log('CogLoader').warning(f'Failed to load {cogName}\n {e}')
 
@@ -40,6 +40,8 @@ class Ganyu(commands.Bot):
             await channel.send(f'{member.mention} Welcome To The Server!')
 
     async def on_ready(self):
+        if IS_DEBUG:
+            log('Debug').warning(f'Ganyu is running in debug mode!')
         await self.change_presence(status=discord.Status.idle, activity=discord.Game('with your data'))
         log().info(f'Ganyu is online as {self.user}.')
 

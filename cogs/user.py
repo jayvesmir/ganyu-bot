@@ -1,14 +1,17 @@
-from discord import app_commands, Interaction, Embed
+from discord import app_commands, Interaction, Embed, Object
 from discord.ext import commands
 
 from ganyuDB import ganyuDB as gdb
 from utils import validateUID
+from config import IS_DEBUG, DEBUG_GUILD
+DEBUG_GUILD = Object(DEBUG_GUILD)
 
 class userCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @app_commands.command(name='account', description="Connects your UID to your discord account.")
+    @app_commands.guilds(DEBUG_GUILD if IS_DEBUG else None)
     async def account(self, i: Interaction, uid: str):
         name = i.user.name + '#' + i.user.discriminator
         pfp = i.user.display_avatar
@@ -64,6 +67,7 @@ class userCog(commands.Cog):
                 await i.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(name='account-update', description="Updates the UID connected to your discord account.")
+    @app_commands.guilds(DEBUG_GUILD if IS_DEBUG else None)
     async def accountUpdate(self, i: Interaction, uid: str):
         name = i.user.name + '#' + i.user.discriminator
         pfp = i.user.display_avatar
@@ -117,6 +121,7 @@ class userCog(commands.Cog):
                 await i.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(name='account-remove', description="Removes your record from the database.")
+    @app_commands.guilds(DEBUG_GUILD if IS_DEBUG else None)
     async def accountRemove(self, i: Interaction):
         pfp = i.user.display_avatar
 
@@ -139,6 +144,7 @@ class userCog(commands.Cog):
                 await i.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(name='account-add-cookie', description="connects your genshin account cookie to your discord account (optional)")
+    @app_commands.guilds(DEBUG_GUILD if IS_DEBUG else None)
     async def accountAddCookie(self, i: Interaction):
         pfp = i.user.display_avatar
         desc = '**Please be patient, this command should be available soon.**'
